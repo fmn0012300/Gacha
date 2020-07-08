@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a9264eae-b7a0-4880-bcae-e66471e5807c" name="attu" url="http://attu.cs.washington.edu">
+        <fileTransfer host="attu.cs.washington.edu" port="22" rootFolder="/homes/iws/fmn4" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

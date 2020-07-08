@@ -22,6 +22,13 @@ public class PlayerCurr {
     }
 
     /**
+     * Add a player into the cache
+     * @param player player to be added
+     * @return true iff he is added successfully
+     */
+    public boolean addPlayer(Person player) {return false;}
+
+    /**
      * trade between 2 players
      * @param one person 1
      * @param two person 2
