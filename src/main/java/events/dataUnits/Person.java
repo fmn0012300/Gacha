@@ -17,11 +17,12 @@ public class Person implements Comparable<Person> {
 
     //adding in new player
     public Person(int priority, int id) {
-
+        this.id=id;
+        this.priority=priority;
     }
 
     public Deck getOwned() {
-        return null;
+        return owned;
     }
 
     public int getId() {
@@ -39,7 +40,8 @@ public class Person implements Comparable<Person> {
      * @return true if added correctly
      */
     public boolean addCards(Cards card, int num) {
-        return false;
+        owned.addCard(card, num);
+        return true;
     }
 
     /**
@@ -49,7 +51,14 @@ public class Person implements Comparable<Person> {
      * @return true if removed successfully
      */
     public boolean removeCards(Cards card, int num) {
-        return false;
+        if (!owned.getDeck().containsKey(card)){
+            throw new NoSuchElementException();
+        }
+        if (num>owned.getDeck().get(card)){
+            throw new IllegalArgumentException();
+        }
+        owned.removeCard(card, num);
+        return true;
     }
 
     /**
@@ -57,7 +66,7 @@ public class Person implements Comparable<Person> {
      * @param drawn number of cards drawn
      */
     public void drawn(int drawn) {
-
+        draws-=drawn;
     }
 
     /**
