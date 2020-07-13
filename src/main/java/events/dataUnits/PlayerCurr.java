@@ -1,6 +1,5 @@
 package events.dataUnits;
 
-import java.util.Map;
 import java.util.PriorityQueue;
 
 //Act as a cache to store curr players
@@ -15,12 +14,11 @@ public class PlayerCurr {
     //check number of players registered right now
     //return true if it reaches max capacity
     private boolean checkPlayerNumber() {
-        return players.size()>20;
+        return false;
     }
 
     //remove the least recently played player and update his data in database
     private void remove() {
-        players.poll();
     }
 
     /**
@@ -28,10 +26,7 @@ public class PlayerCurr {
      * @param player player to be added
      * @return true iff he is added successfully
      */
-    public boolean addPlayer(Person player) {
-        players.add(player);
-        return true;
-    }
+    public boolean addPlayer(Person player) {return false;}
 
     /**
      * trade between 2 players
@@ -42,12 +37,6 @@ public class PlayerCurr {
      * @return true if trade is successful
      */
     public boolean trade(Person one, Person two, Deck ones, Deck twos) {
-        for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
-            one.owned.addCard(entry.getKey(), entry.getValue());
-        }
-        for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
-            two.owned.addCard(entry.getKey(), entry.getValue());
-        }
-        return true;
+        return false;
     }
 }
