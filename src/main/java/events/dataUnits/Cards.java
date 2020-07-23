@@ -8,10 +8,12 @@ import java.util.Objects;
 public class Cards {
     private int id;
     private String name;
+    private String rarity;
 
-    public Cards(int id, String name) {
+    public Cards(int id, String name, String rarity) {
         this.id = id;
         this.name = name;
+        this.rarity = rarity;
     }
 
     //get fields
@@ -39,6 +41,12 @@ public class Cards {
     public String getAddr() {
         return null;
     }
+
+    /**
+     * Get rarity of the card
+     * @return rarity of the card
+     */
+    public String getRarity() { return rarity; }
 
     @Override
     public boolean equals(Object o) {

@@ -2,6 +2,7 @@ package events.dataUnits;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -64,5 +65,18 @@ public class Deck {
      */
     public void removeCard(Cards card, int num) {
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Deck)) return false;
+        Deck deck1 = (Deck) o;
+        return deck.equals(deck1.deck);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(deck);
     }
 }
