@@ -28,7 +28,8 @@ public class Person implements Comparable<Person> {
      * @param id id of the player
      */
     public Person(int priority, int id) {
-
+        this.id=id;
+        this.priority=priority;
     }
 
     /**
@@ -36,7 +37,7 @@ public class Person implements Comparable<Person> {
      * @return a copy of his deck
      */
     public Deck getOwned() {
-        return null;
+        return owned;
     }
 
     /**
@@ -70,7 +71,10 @@ public class Person implements Comparable<Person> {
      * @spec.effects this.deck_post = this.deck_pre U {deck}
      */
     public boolean addCards(Deck deck) {
-        return false;
+        for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
+            owned.addCard(entry.getKey(), entry.getValue());
+        }
+        return true;
     } // change to deck
 
     /**
@@ -82,7 +86,10 @@ public class Person implements Comparable<Person> {
      * @spec.effects this.deck_post = this.deck_pre / {deck}
      */
     public boolean removeCards(Deck deck) {
-        return false;
+        for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
+            owned.removeCard(entry.getKey(), entry.getValue());
+        }
+        return true;
     }
 
     /**
@@ -93,7 +100,10 @@ public class Person implements Comparable<Person> {
      * @spec.effects this.draw_post = this.draw_pre - drawn
      */
     public void drawn(int drawn) {
-
+        if (drawn<=0){
+            throw new IllegalArgumentException();
+        }
+        draws-=drawn;
     }
 
     /**
