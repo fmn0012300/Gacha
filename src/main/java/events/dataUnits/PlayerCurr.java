@@ -2,11 +2,10 @@ package events.dataUnits;
 
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 /**
  * <b>PlayerCurr</b> is a mutable data structure that acts like a cache storing
- * data of at most n number of players (most recently played)
+ * data of at most N number of players (most recently played)
  *
  * <p>Specification fields
  * @spec.specfield: Queue: a queue having the least recently played player at the front
@@ -18,6 +17,7 @@ import java.util.Set;
  * </p>
  */
 public class PlayerCurr {
+    private static final int N = 20;
     private PriorityQueue<Person> recentPlayers;
     private Map<Integer, Person> players;
     //Representation Invariant:
@@ -39,12 +39,19 @@ public class PlayerCurr {
     //check number of players registered right now
     //return true if it reaches max capacity
     private boolean checkPlayerNumber() {
-        return false;
+        return players.size()>N;
     }
 
     //remove the least recently played player from cache
     //and update their data in database, if they are new, add in a new tuple
     private void remove() {
+        Person newest = recentPlayers.peek();
+        PriorityQueue<Person> current = recentPlayers;
+        current.poll();
+        Person remove = current.poll();
+        players.remove(remove.getId());
+        recentPlayers=current;
+        recentPlayers.add(newest);
     }
 
     /**
@@ -56,7 +63,18 @@ public class PlayerCurr {
      * @spec.modifies Queue
      * @spec.effects if Queue = A, Queue_post = A U {playerId}
      */
-    public boolean addPlayer(int playerId) {return false; }
+    public boolean addPlayer(int playerId) {
+        if (players.containsKey(playerId)){
+            return false;
+        }
+        if (checkPlayerNumber()){
+            remove();
+        }
+        players.put(playerId, new Person(0, playerId));
+        recentPlayers.add(new Person(0, playerId));
+        return true;
+
+    }
 
     /**
      * Load Person 1 and 2 into the queue (if they are not) and trade
@@ -76,7 +94,20 @@ public class PlayerCurr {
      *               Person(one).deck and Person(two).deck will be updated accordingly
      */
     public boolean trade(int one, int two, Deck ones, Deck twos) {
-        return false;
+        if (!recentPlayers.contains(get(one))){
+            addPlayer(one);
+        }
+        if (!recentPlayers.contains(get(two))){
+            addPlayer(two);
+        }
+        for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
+            players.get(one).owned.addCard(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
+            players.get(two).owned.addCard(entry.getKey(), entry.getValue());
+        }
+        return true;
+
     }
 
     /**
@@ -87,5 +118,7 @@ public class PlayerCurr {
      * @spec.effects 1. If the player id does not appear in Queue it will be added
      *               2. Queue will have playerId to be the most recently played
      */
-    public Person get(int playerId) {return null; }
+    public Person get(int playerId) {
+        return players.get(playerId);
+    }
 }

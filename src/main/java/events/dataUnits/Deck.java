@@ -50,6 +50,14 @@ public class Deck {
      * @spec.effects If deck = A, deck_post = A U {card->num}
      */
     public void addCard(Cards card, int num) {
+        if (num<=0){
+            throw new IllegalArgumentException();
+        }
+        if (deck.containsKey(card)){
+            deck.put(card, deck.get(card)+num);
+        }else {
+            deck.put(card, num);
+        }
 
     }
 
@@ -63,6 +71,20 @@ public class Deck {
      * @spec.effects If deck = A, deck_post = A / {card->num}
      */
     public void removeCard(Cards card, int num) {
+        if (num<=0){
+            throw new IllegalArgumentException();
+        }
+        if (!deck.containsKey(card)){
+            throw new IllegalArgumentException();
+        }
+        int value=deck.get(card)-num;
+        if (value<0){
+            throw new IllegalArgumentException();
+        }else if (value==0){
+            deck.remove(card);
+        }else {
+            deck.put(card, value);
+        }
 
     }
 }
