@@ -2,6 +2,7 @@ package events.dataUnits;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.Random;
 
 /**
  * <b>CardPool</b> is a immutable class which stores and arranges cards based on their
@@ -45,7 +46,20 @@ public class CardPool {
      * @spec.throws IllegalArgumentException if rarity is not defined
      * @spec.requires rarity != null
      */
-    public Cards getCard(String rarity) {return null; }
+    public Cards getCard(String rarity) {
+        if (!pool.containsKey(rarity)){
+            throw new IllegalArgumentException();
+        }
+        int size=pool.get(rarity).size();
+        int item=new Random().nextInt(size);
+        int i = 0;
+        for (Cards card: pool.get(rarity)){
+            if (i==item){
+                return card;
+            }
+        }
+        return null;
+    }
 
     /**
      * Get all cards of a particular rarity
@@ -55,7 +69,12 @@ public class CardPool {
      * @spec.throws IllegalArgumentException if rarity is not defined
      * @spec.requires rarity != null
      */
-    public Set<Cards> getRarity(String rarity) {return null; }
+    public Set<Cards> getRarity(String rarity) {
+        if (!pool.containsKey(rarity)){
+            throw new IllegalArgumentException();
+        }
+        return pool.get(rarity);
+    }
 
     /**
      * Get a specific card with name given
@@ -64,5 +83,14 @@ public class CardPool {
      * @return Card with the name given, null if no such card exists
      * @spec.requires name != null
      */
-    public Cards getSpecificCard(String name) {return null; }
+    public Cards getSpecificCard(String name) {
+        for (Map.Entry<String, Set<Cards>> entry: pool.entrySet()){
+            for (Cards card: entry.getValue()){
+                if (card.getName()==name){
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
 }

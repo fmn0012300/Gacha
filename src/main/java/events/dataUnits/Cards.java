@@ -50,8 +50,12 @@ public class Cards {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cards)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Cards)) {
+            return false;
+        }
         Cards cards = (Cards) o;
         return id == cards.id &&
                 name.equals(cards.name);
