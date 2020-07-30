@@ -34,6 +34,11 @@ public class Deck {
     public Deck() {deck = new HashMap<>(); }
 
     /**
+     * Copy constructor
+     */
+    public Deck(Deck other) {deck = new HashMap<>(other.deck); }
+
+    /**
      * Get a copy of the deck
      * @return a copy of this
      */

@@ -37,7 +37,7 @@ public class Person implements Comparable<Person> {
      * @return a copy of his deck
      */
     public Deck getOwned() {
-        return owned;
+        return new Deck(owned);
     }
 
     /**
