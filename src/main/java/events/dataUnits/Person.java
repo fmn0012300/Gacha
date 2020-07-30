@@ -8,7 +8,7 @@ import java.util.*;
  * <b>Person</b> is a mutable class that keeps track of a player's status while playing
  */
 public class Person implements Comparable<Person> {
-    Deck owned; //number of each unique cards that he owns
+    private Deck owned; //number of each unique cards that he owns
     private int id; //player id
     private int draws; //number of draws left for today
     private int priority;
