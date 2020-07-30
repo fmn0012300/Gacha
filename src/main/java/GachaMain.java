@@ -1,4 +1,5 @@
 
+import events.ClientRequestHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -8,6 +9,6 @@ public class GachaMain {
     public static void main(String[] args) throws LoginException {
         JDA jda = new JDABuilder("token").build();
 
-        //jda.addEventListener(new );
+        jda.addEventListener(new ClientRequestHandler());
     }
 }
