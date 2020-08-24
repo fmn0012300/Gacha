@@ -44,6 +44,6 @@ public class ClientRequestHandler extends ListenerAdapter {
         }
 
         // send msg back
-        event.getChannel().sendMessage(statement).queue();
+        // event.getChannel().sendMessage(statement).queue();
     }
 }
