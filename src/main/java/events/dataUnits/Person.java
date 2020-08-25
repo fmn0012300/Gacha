@@ -65,6 +65,10 @@ public class Person implements Comparable<Person> {
      */
     public int getPriority() {return priority; }
 
+    public void setDraws(int draws) {
+        this.draws = draws;
+    }
+
     /**
      * add (a) card(s) to his deck
      * @param deck deck to be added
@@ -119,14 +123,6 @@ public class Person implements Comparable<Person> {
             throw new IllegalArgumentException();
         }
         draws-=drawn;
-    }
-
-    /**
-     * update database for this player
-     * @return true if updated successfully, false if any database related problem occurred
-     */
-    public boolean updateDataBase() {
-        return false;
     }
 
     @Override
