@@ -1,5 +1,6 @@
 package events.dataUnits;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Random;
@@ -35,7 +36,7 @@ public class CardPool {
      * @spec.effects Construct a new CardPool
      */
     public CardPool() { //directly created from database
-
+        pool = new HashMap<>();
     }
 
     /**

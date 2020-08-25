@@ -1,5 +1,6 @@
 package events.dataUnits;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -33,7 +34,8 @@ public class PlayerCurr {
      * @spec.effects Constructs a new PlayerCurr cache
      */
     public PlayerCurr() {
-
+        recentPlayers= new PriorityQueue<>();
+        players = new HashMap<>();
     }
 
     //check number of players registered right now
@@ -101,10 +103,12 @@ public class PlayerCurr {
             addPlayer(two);
         }
         for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
-            players.get(one).owned.addCard(entry.getKey(), entry.getValue());
+            players.get(one).getOwned().addCard(entry.getKey(), entry.getValue());
+            players.get(two).getOwned().removeCard(entry.getKey(), entry.getValue());
         }
         for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
-            players.get(two).owned.addCard(entry.getKey(), entry.getValue());
+            players.get(two).getOwned().addCard(entry.getKey(), entry.getValue());
+            players.get(one).getOwned().removeCard(entry.getKey(), entry.getValue());
         }
         return true;
 
