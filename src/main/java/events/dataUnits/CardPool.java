@@ -1,10 +1,9 @@
 package events.dataUnits;
 
-import events.DataBaseManager;
-
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Random;
+import java.util.Set;
 //
 /**
  * <b>CardPool</b> is a immutable class which stores and arranges cards based on their
@@ -23,7 +22,7 @@ import java.util.Random;
  */
 public class CardPool {
     private Map<String, Set<Cards>> pool;
-    private DataBaseManager data;
+    private Map<String, Cards> nameToCard;
     //Representation Invariant:
     // Each card should only be present in one rarity.
     // i.e. All values in pool.get(rarity1) != Any values in pool.get(rarity2)
@@ -33,12 +32,24 @@ public class CardPool {
     // pool = pool of cards divided by rarity
     // pool.(rarity) will have all cards of the same rarity
 
+    // ctor for testing only
+    public CardPool() {
+        pool = new HashMap<>();
+        nameToCard = new HashMap<>();
+    }
+
     /**
      * @spec.effects Construct a new CardPool
      */
-    public CardPool() { //directly created from database
-        data = new DataBaseManager();
-        pool=data.getCards();
+    public CardPool(Map<String, Set<Cards>> cards) { //directly created from database
+        pool = new HashMap<>(cards);
+        nameToCard = new HashMap<>();
+        // get a name to card map
+        for (Set<Cards> c: cards.values()) {
+            for (Cards card: c) {
+                nameToCard.put(card.getName(), card);
+            }
+        }
     }
 
     /**
@@ -88,12 +99,8 @@ public class CardPool {
      * @spec.requires name != null
      */
     public Cards getSpecificCard(String name) {
-        for (Map.Entry<String, Set<Cards>> entry: pool.entrySet()){
-            for (Cards card: entry.getValue()){
-                if (card.getName()==name){
-                    return card;
-                }
-            }
+        if (nameToCard.containsKey(name)) {
+            return nameToCard.get(name);
         }
         return null;
     }
