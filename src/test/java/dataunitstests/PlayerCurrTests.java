@@ -1,4 +1,4 @@
-package dataUnitsTests;
+package dataunitstests;
 
 import events.dataUnits.Cards;
 import events.dataUnits.Deck;

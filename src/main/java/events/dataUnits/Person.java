@@ -30,6 +30,7 @@ public class Person implements Comparable<Person> {
     public Person(int priority, int id) {
         this.id=id;
         this.priority=priority;
+        owned = new Deck();
     }
 
     /**
