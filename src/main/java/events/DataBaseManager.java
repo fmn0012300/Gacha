@@ -28,14 +28,14 @@ public class DataBaseManager {
     private PreparedStatement getAllCards;
 
     // get player data
-    private static final String GET_PLAYER_DATA = "SELECT P.draw_left as draw, C.cid as card_id, C.name as card_name, " +
+    private static final String GET_PLAYER_DATA = "SELECT P.draw_left as draw, C.cid as card_id, C.name as card_name, "+
             "C.rarity as rarity, O.amount as owned " +
             "FROM Player AS P, Cards AS C, Own as O " +
             "WHERE P.pid = ? AND P.pid = O.pid AND C.cid = O.cid";
     private PreparedStatement getPlayerData;
 
     // delete all cards owned
-    private static final String DELETE_CARDS_OWNED = "DELETE FROM Own WHERE O.pid = ?";
+    private static final String DELETE_CARDS_OWNED = "DELETE FROM Own WHERE pid = ?";
     private PreparedStatement deleteCardsOwned;
 
     // add in cards
@@ -57,7 +57,7 @@ public class DataBaseManager {
             connect();
             prepareStatement();
         } catch (Exception e) {
-            System.exit(1);
+            e.printStackTrace();
         }
     }
 
@@ -119,6 +119,7 @@ public class DataBaseManager {
                 Set<Cards> thisRarity = new HashSet<>();
                 while (rst.next()) {
                     Cards temp = new Cards(rst.getInt("cid"), rst.getString("name"), rst.getString("rarity"));
+                    thisRarity.add(temp);
                 }
                 result.put(Constants.RARITY[i], thisRarity);
                 rst.close();
@@ -144,7 +145,8 @@ public class DataBaseManager {
             Deck owned = new Deck();
             while (rst.next()) {
                 result.setDraws(rst.getInt("draw"));
-                Cards temp = new Cards(rst.getInt("card_id"), rst.getString("card_name"), rst.getString("rarity"));
+                Cards temp = new Cards(rst.getInt("card_id"), rst.getString("card_name"),
+                                        rst.getString("rarity"));
                 owned.addCard(temp, rst.getInt("owned"));
             }
             result.addCards(owned);

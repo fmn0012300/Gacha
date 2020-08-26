@@ -1,6 +1,7 @@
-package dataUnitsTests;
+package dataunitstests;
 import events.dataUnits.CardPool;
 import events.dataUnits.Cards;
+import events.dataUnits.Constants;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -22,7 +23,7 @@ public class CardPoolTests {
      */
     @Test
     public void testGetCard() {
-        String rarity = "TBD";
+        String rarity = Constants.RARITY[0];
         CardPool test = new CardPool();
         Cards card = test.getCard(rarity);
         assertTrue(card.getRarity().equals(rarity));
