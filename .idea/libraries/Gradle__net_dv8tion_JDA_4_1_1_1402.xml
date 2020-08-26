@@ -1,7 +1,6 @@
 <component name="libraryTable">
   <library name="Gradle: net.dv8tion:JDA:4.1.1_140">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jbr/bin/Could not find net.dv8tion:JDA:4.1.1_140." />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.dv8tion/JDA/4.1.1_140/8974d980410b241027ac096d4c67fbd8b0c3a7fd/JDA-4.1.1_140.jar!/" />
     </CLASSES>
     <JAVADOC />

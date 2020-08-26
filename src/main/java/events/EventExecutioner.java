@@ -103,8 +103,8 @@ public class EventExecutioner{
      * @param card2 card2's name
      * @return statement to tell success
      */
-    public String trade(int id1, int id2, Deck card1, Deck card2) {
-        return MessageGenerator.trade(players.trade(id1, id2, card1, card2));
+    public String trade(int id1, int id2, String card1, String card2, int onesAmount, int twosAmount) {
+        return MessageGenerator.trade(players.trade(id1, id2, card1, card2, onesAmount, twosAmount));
     }
 
     /**
@@ -137,10 +137,7 @@ public class EventExecutioner{
      * @return TBD
      */
     public String getCard(int id, String name) {
-        Deck deck = players.get(id).getOwned();
-        if (!deck.getDeck().containsKey(name)){
-            return "You do not own this card.";
-        }
+
         return pool.getSpecificCard(name).getAddr(); //Return TBD
     }
 }

@@ -1,5 +1,7 @@
 package events.dataUnits;
 
+import events.DataBaseManager;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -21,6 +23,9 @@ public class PlayerCurr {
     private static final int N = 20;
     private PriorityQueue<Person> recentPlayers;
     private Map<Integer, Person> players;
+    private int priority;
+    private DataBaseManager conn;
+    private CardPool cp;
     //Representation Invariant:
     //  players.size() == recentPlayers.size() for all time
     //  recentPlayers.pop() must be the most recently played player
@@ -30,31 +35,36 @@ public class PlayerCurr {
     //  players = all players stored in the cache
     //  recentPlayers keeps track of the most recently player player
 
+    // a ctor for testing purposes only
+    public PlayerCurr() {
+        recentPlayers = new PriorityQueue<>();
+        players = new HashMap<>();
+        cp = new CardPool();
+    }
+
     /**
      * @spec.effects Constructs a new PlayerCurr cache
      */
-    public PlayerCurr() {
+    public PlayerCurr(DataBaseManager conn) {
         recentPlayers= new PriorityQueue<>();
         players = new HashMap<>();
+        priority = 0;
+        this.conn = conn;
+        cp = new CardPool(conn.getCards());
     }
 
     //check number of players registered right now
     //return true if it reaches max capacity
     private boolean checkPlayerNumber() {
-        return players.size()>N;
+        return players.size() > N;
     }
 
     //remove the least recently played player from cache
     //and update their data in database, if they are new, add in a new tuple
     private void remove() {
-        Person newest = recentPlayers.peek();
-        PriorityQueue<Person> current = recentPlayers;
-        current.poll();
-        Person remove = current.poll();
-        players.remove(remove.getId());
-        recentPlayers=current;
-        recentPlayers.add(newest);
-
+        Person toBeRemoved = recentPlayers.remove();
+        players.remove(toBeRemoved.getId());
+        conn.updatePlayer(toBeRemoved);
     }
 
     /**
@@ -67,16 +77,21 @@ public class PlayerCurr {
      * @spec.effects if Queue = A, Queue_post = A U {playerId}
      */
     public boolean addPlayer(int playerId) {
-        if (players.containsKey(playerId)){
-            return false;
-        }
-        if (checkPlayerNumber()){
+        if (checkPlayerNumber()) {
             remove();
         }
-        players.put(playerId, new Person(0, playerId));
-        recentPlayers.add(new Person(0, playerId));
+        if (players.containsKey(playerId)) {
+            return false;
+        }
+        // check if player exists
+        if (!conn.ifPlayerExists(playerId)) {
+            conn.createPlayer(playerId);
+        }
+        Person player = conn.getPlayer(playerId, priority);
+        priority++;
+        recentPlayers.add(player);
+        players.put(playerId, player);
         return true;
-
     }
 
     /**
@@ -87,6 +102,8 @@ public class PlayerCurr {
      * @param two person 2 id
      * @param ones person 1's cards
      * @param twos person 2's cards
+     * @param onesAmount amount of ones
+     * @param twosAmount number of twos
      * @return true if trade is successful, false if either one or two does not
      *         have the cards being traded
      * @spec.requires one, two, ones, twos != null
@@ -96,23 +113,23 @@ public class PlayerCurr {
      *                  of the Queue
      *               Person(one).deck and Person(two).deck will be updated accordingly
      */
-    public boolean trade(int one, int two, Deck ones, Deck twos) {
-        if (!recentPlayers.contains(get(one))){
-            addPlayer(one);
+    public boolean trade(int one, int two, String ones, String twos, int onesAmount, int twosAmount) {
+        Deck first = new Deck();
+        Deck second = new Deck();
+        first.addCard(cp.getSpecificCard(ones), onesAmount);
+        second.addCard(cp.getSpecificCard(twos), twosAmount);
+        Person a = this.get(one);
+        Person b = this.get(two);
+        if (!a.removeCards(first)) {
+            return false;
         }
-        if (!recentPlayers.contains(get(two))){
-            addPlayer(two);
+        if (!b.removeCards(second)) {
+            a.addCards(first);
+            return false;
         }
-        for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
-            players.get(one).getOwned().addCard(entry.getKey(), entry.getValue());
-            players.get(two).getOwned().removeCard(entry.getKey(), entry.getValue());
-        }
-        for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
-            players.get(two).getOwned().addCard(entry.getKey(), entry.getValue());
-            players.get(one).getOwned().removeCard(entry.getKey(), entry.getValue());
-        }
+        a.addCards(second);
+        b.addCards(first);
         return true;
-
     }
 
     /**
@@ -124,6 +141,9 @@ public class PlayerCurr {
      *               2. Queue will have playerId to be the most recently played
      */
     public Person get(int playerId) {
+        if (!players.containsKey(playerId)) {
+            this.addPlayer(playerId);
+        }
         return players.get(playerId);
     }
 }
