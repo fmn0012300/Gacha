@@ -13,7 +13,7 @@ import java.util.Random;
  * update, load and read DataBase, player base, return necessary statements, etc
  */
 public class EventExecutioner{
-    private CardPool pool;
+
     private PlayerCurr players;
 
     /**
@@ -21,7 +21,7 @@ public class EventExecutioner{
      * Open up the player cache
      */
     public EventExecutioner() {
-        pool = new CardPool();
+
         players = new PlayerCurr();
     }
 
@@ -120,9 +120,9 @@ public class EventExecutioner{
         if (rarity.equals("all")){
             return MessageGenerator.drawnResult(deck);
         }
-        Deck newDeck = null;
+        Deck newDeck = new Deck();
         for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
-            if (entry.getKey().getRarity()==rarity){
+            if (entry.getKey().getRarity().equals(rarity)){
                 newDeck.addCard(entry.getKey(), entry.getValue());
             }
         }
