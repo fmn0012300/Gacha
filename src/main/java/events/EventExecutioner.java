@@ -1,7 +1,10 @@
 package events;
 
-import events.dataUnits.CardPool;
-import events.dataUnits.PlayerCurr;
+import events.dataUnits.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class handles requests that are translated to function understandable
@@ -29,7 +32,7 @@ public class EventExecutioner{
      *         (use message generator class)
      */
     public String registerPlayer(int id) {
-        return null;
+        return MessageGenerator.addPlayer(players.addPlayer(id));
     }
 
     /**
@@ -41,7 +44,37 @@ public class EventExecutioner{
      * @return someway to send all the cards drawn TBD
      */
     public String draw(int id, int num) {
-        return null;
+        String rarity = "";
+        int numProb = Constants.PROBABILITY.length;
+        boolean sr = false;
+        Map<Cards, Integer> map = new HashMap<>();
+        Random generator = new Random();
+        int prob;
+        for (int i=0; i<num; i++){
+            if (num==9 && !sr){
+                prob = generator.nextInt(Constants.PROBABILITY[0])+Constants.PROBABILITY[numProb-1]
+                -Constants.PROBABILITY[0];
+            }else {
+                prob = generator.nextInt(Constants.PROBABILITY[numProb-1]);
+            }
+            for (int j=0; j<numProb; j++){
+                if (prob<Constants.PROBABILITY[j]){
+                    rarity=Constants.RARITY[j];
+                    break;
+                }
+            }
+            if (rarity!=Constants.RARITY[0]){
+                sr=true;
+            }
+            Cards card = pool.getCard(rarity);
+            if (map.containsKey(card)){
+                map.put(card, map.get(card)+1);
+            }else {
+                map.put(card, 1);
+            }
+        }
+        //have a map of all cards drawn, can change to other datatype when decided.
+        return null; //return TBD
     }
 
     /**
@@ -70,8 +103,8 @@ public class EventExecutioner{
      * @param card2 card2's name
      * @return statement to tell success
      */
-    public String trade(int id1, int id2, String card1, String card2) {
-        return null;
+    public String trade(int id1, int id2, Deck card1, Deck card2) {
+        return MessageGenerator.trade(players.trade(id1, id2, card1, card2));
     }
 
     /**
@@ -82,7 +115,18 @@ public class EventExecutioner{
      * @return someway to display the cards, tbd
      */
     public String show(int id, String rarity) {
-        return null;
+        Deck deck = players.get(id).getOwned();
+
+        if (rarity.equals("all")){
+            return MessageGenerator.drawnResult(deck);
+        }
+        Deck newDeck = null;
+        for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
+            if (entry.getKey().getRarity()==rarity){
+                newDeck.addCard(entry.getKey(), entry.getValue());
+            }
+        }
+        return MessageGenerator.drawnResult(newDeck);
     }
 
     /**
@@ -93,6 +137,10 @@ public class EventExecutioner{
      * @return TBD
      */
     public String getCard(int id, String name) {
-        return null;
+        Deck deck = players.get(id).getOwned();
+        if (!deck.getDeck().containsKey(name)){
+            return "You do not own this card.";
+        }
+        return pool.getSpecificCard(name).getAddr(); //Return TBD
     }
 }

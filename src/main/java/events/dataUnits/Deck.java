@@ -103,6 +103,15 @@ public class Deck {
     }
 
     @Override
+    public String toString(){
+        String result="";
+        for (Map.Entry<Cards, Integer> entry: deck.entrySet()){
+            result+=entry.getKey().getName()+" x"+entry.getValue()+"\n";
+        }
+        return result;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(deck);
     }

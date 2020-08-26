@@ -54,6 +54,7 @@ public class PlayerCurr {
         players.remove(remove.getId());
         recentPlayers=current;
         recentPlayers.add(newest);
+
     }
 
     /**
