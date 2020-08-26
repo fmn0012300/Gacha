@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
+//
 /**
  * <b>Deck</b> is a immutable data structure that stores cards and their amount
  *
@@ -100,6 +100,15 @@ public class Deck {
         if (!(o instanceof Deck)) return false;
         Deck deck1 = (Deck) o;
         return deck.equals(deck1.deck);
+    }
+
+    @Override
+    public String toString(){
+        String result="";
+        for (Map.Entry<Cards, Integer> entry: deck.entrySet()){
+            result+=entry.getKey().getName()+" x"+entry.getValue()+"\n";
+        }
+        return result;
     }
 
     @Override

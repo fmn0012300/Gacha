@@ -1,9 +1,11 @@
 package events.dataUnits;
 
+import events.DataBaseManager;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.Random;
-
+//
 /**
  * <b>CardPool</b> is a immutable class which stores and arranges cards based on their
  * rarity
@@ -20,8 +22,8 @@ import java.util.Random;
  * </p>
  */
 public class CardPool {
-    Map<String, Set<Cards>> pool;
-
+    private Map<String, Set<Cards>> pool;
+    private DataBaseManager data;
     //Representation Invariant:
     // Each card should only be present in one rarity.
     // i.e. All values in pool.get(rarity1) != Any values in pool.get(rarity2)
@@ -35,7 +37,8 @@ public class CardPool {
      * @spec.effects Construct a new CardPool
      */
     public CardPool() { //directly created from database
-
+        data = new DataBaseManager();
+        pool=data.getCards();
     }
 
     /**
@@ -57,6 +60,7 @@ public class CardPool {
             if (i==item){
                 return card;
             }
+            i+=1;
         }
         return null;
     }

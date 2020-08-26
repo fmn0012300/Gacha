@@ -1,8 +1,9 @@
 package events.dataUnits;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-
+//
 /**
  * <b>PlayerCurr</b> is a mutable data structure that acts like a cache storing
  * data of at most N number of players (most recently played)
@@ -33,7 +34,8 @@ public class PlayerCurr {
      * @spec.effects Constructs a new PlayerCurr cache
      */
     public PlayerCurr() {
-
+        recentPlayers= new PriorityQueue<>();
+        players = new HashMap<>();
     }
 
     //check number of players registered right now
@@ -45,6 +47,13 @@ public class PlayerCurr {
     //remove the least recently played player from cache
     //and update their data in database, if they are new, add in a new tuple
     private void remove() {
+        Person newest = recentPlayers.peek();
+        PriorityQueue<Person> current = recentPlayers;
+        current.poll();
+        Person remove = current.poll();
+        players.remove(remove.getId());
+        recentPlayers=current;
+        recentPlayers.add(newest);
 
     }
 
@@ -58,7 +67,14 @@ public class PlayerCurr {
      * @spec.effects if Queue = A, Queue_post = A U {playerId}
      */
     public boolean addPlayer(int playerId) {
-
+        if (players.containsKey(playerId)){
+            return false;
+        }
+        if (checkPlayerNumber()){
+            remove();
+        }
+        players.put(playerId, new Person(0, playerId));
+        recentPlayers.add(new Person(0, playerId));
         return true;
 
     }
@@ -87,12 +103,14 @@ public class PlayerCurr {
         if (!recentPlayers.contains(get(two))){
             addPlayer(two);
         }
-      //  for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
-           // players.get(one).owned.addCard(entry.getKey(), entry.getValue());
-      //  }
-      //  for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
-           // players.get(two).owned.addCard(entry.getKey(), entry.getValue());
-      //  }
+        for (Map.Entry<Cards, Integer> entry: twos.getDeck().entrySet()){
+            players.get(one).getOwned().addCard(entry.getKey(), entry.getValue());
+            players.get(two).getOwned().removeCard(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<Cards, Integer> entry: ones.getDeck().entrySet()){
+            players.get(two).getOwned().addCard(entry.getKey(), entry.getValue());
+            players.get(one).getOwned().removeCard(entry.getKey(), entry.getValue());
+        }
         return true;
 
     }

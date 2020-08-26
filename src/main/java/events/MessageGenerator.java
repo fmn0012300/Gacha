@@ -1,14 +1,16 @@
 package events;
 
+import events.dataUnits.Deck;
+
 //this class generates message accordingly
 public class MessageGenerator {
     /**
      * Generate a text to tell the result of draws
-     * @param cards cards drawn
+     * @param deck the deck
      * @return result
      */
-    public static String drawnResult(String[] cards) {
-        return null;
+    public static String drawnResult(Deck deck) {
+        return deck.toString();
     }
 
     /**
@@ -17,7 +19,11 @@ public class MessageGenerator {
      * @return result text
      */
     public static String trade(boolean success) {
-        return null;
+        if (success){
+            return "trade completed.";
+        }else {
+            return "trade failed, you do not own the card(s) you are trading away.";
+        }
     }
 
     /**
@@ -33,6 +39,18 @@ public class MessageGenerator {
      * @return error message string
      */
     public static String warnings() {
-        return null;
+        return "error occurred, please contact admins for more info.";
+    }
+
+    /**
+     * text to tell if player is added
+     * @param success success or not
+     * @return result text
+     */
+    public static String addPlayer(boolean success) {
+        if (success){
+            return "player added successfully.";
+        }
+        return MessageGenerator.warnings();
     }
 }

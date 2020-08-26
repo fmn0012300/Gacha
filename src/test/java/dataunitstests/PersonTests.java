@@ -14,7 +14,7 @@ public class PersonTests {
      */
     @Test
     public void testGetsAndConstructor() {
-        Person test1 = new Person(0);
+        Person test1 = new Person(0, 123456);
         assertEquals(0, test1.getPriority());
         assertEquals(123456, test1.getId());
         //leave space for future test on getOwned

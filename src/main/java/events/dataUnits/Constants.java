@@ -9,10 +9,9 @@ public class Constants {
     public static final String[] RARITY = {"Normal", "Rare", "Epic", "Unique", "Legendary"};
 
     // probability stored as an int array,
-    // let's say if a prob = n -> prob of getting that rarity = n / 1000
-    // RARITY[i] has a PROBABILITY[i] to get
+    // the probability of position n is (the value of n minus the value of n-1)/1000
     // SUM OF ALL PROBABILITY = 1000
-    public static final int[] PROBABILITY = {1000, 0, 0, 0, 0};
+    public static final int[] PROBABILITY = {500, 850, 950, 999, 1000};
 
     // path that cards' pictures are stored at
     // to use it append /(rarity)/(name).jpg to get the card

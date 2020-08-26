@@ -3,7 +3,7 @@ package events.dataUnits;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-
+//
 /**
  * <b>Person</b> is a mutable class that keeps track of a player's status while playing
  */
@@ -20,7 +20,9 @@ public class Person implements Comparable<Person> {
     //  id != 0
 
     //for testing only
-    public Person(int priority) {}
+    public Person(int priority) {
+        owned=new Deck();
+    }
 
     /**
      * @spec.effect create a new Person with given id and priority (draw out other data from database)
@@ -30,7 +32,7 @@ public class Person implements Comparable<Person> {
     public Person(int priority, int id) {
         this.id=id;
         this.priority=priority;
-        owned = new Deck();
+        owned=new Deck();
     }
 
     /**
@@ -38,7 +40,7 @@ public class Person implements Comparable<Person> {
      * @return a copy of his deck
      */
     public Deck getOwned() {
-        return new Deck(owned);
+        return owned;
     }
 
     /**
@@ -76,6 +78,9 @@ public class Person implements Comparable<Person> {
      * @spec.effects this.deck_post = this.deck_pre U {deck}
      */
     public boolean addCards(Deck deck) {
+        if (deck==null){
+            throw new IllegalArgumentException();
+        }
         for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
             owned.addCard(entry.getKey(), entry.getValue());
         }
@@ -91,7 +96,16 @@ public class Person implements Comparable<Person> {
      * @spec.effects this.deck_post = this.deck_pre / {deck}
      */
     public boolean removeCards(Deck deck) {
+        if (deck==null){
+            throw new IllegalArgumentException();
+        }
         for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
+            if (!owned.getDeck().containsKey(entry.getKey())){
+                return false;
+            }
+            if (owned.getDeck().get(entry.getKey())- entry.getValue()<0){
+                return false;
+            }
             owned.removeCard(entry.getKey(), entry.getValue());
         }
         return true;
