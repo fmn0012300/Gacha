@@ -90,8 +90,9 @@ public class EventExecutioner{
         boolean r = false;
         if (!rarity.equals("all")){
             for (int i=0; i<Constants.RARITY.length; i++){
-                if (rarity.equals(Constants.RARITY[i])){
+                if (rarity.equals(Constants.RARITY[i])) {
                     r = true;
+                    break;
                 }
             }
         }else {

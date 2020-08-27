@@ -191,7 +191,7 @@ public class PlayerCurr {
                     break;
                 }
             }
-            if (rarity != Constants.RARITY[0]) {
+            if (!rarity.equals(Constants.RARITY[0])) {
                 sr = true;
             }
             Cards card = cp.getCard(rarity);
@@ -204,8 +204,7 @@ public class PlayerCurr {
         Deck deck = new Deck(map);
         players.get(id).addCards(deck);
         players.get(id).drawn(num);
-        String result =deck.toString();
-        return result;
+        return deck.toString();
     }
 
     /**

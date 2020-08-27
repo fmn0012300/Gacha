@@ -104,14 +104,14 @@ public class Deck {
 
     @Override
     public String toString(){
-        String result="";
+        StringBuilder result= new StringBuilder();
         for (Map.Entry<Cards, Integer> entry: deck.entrySet()){
-            result+=entry.getKey().getName()+" x"+entry.getValue()+"\n";
+            result.append(entry.getKey().getName()).append(" x").append(entry.getValue()).append("\n");
         }
-        if (result.equals("")){
-            result="You don't have any cards of this rarity";
+        if (result.toString().equals("")){
+            result = new StringBuilder("You don't have any cards of this rarity");
         }
-        return result;
+        return result.toString();
     }
 
     @Override
