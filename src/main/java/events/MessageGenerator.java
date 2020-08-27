@@ -1,16 +1,18 @@
 package events;
 
-import events.dataUnits.Deck;
-
 //this class generates message accordingly
 public class MessageGenerator {
     /**
      * Generate a text to tell the result of draws
-     * @param deck the deck
+     * @param result text of result of draws
+     * @param success Draw successfully or not
      * @return result
      */
-    public static String drawnResult(Deck deck) {
-        return deck.toString();
+    public static String drawnResult(String result, Boolean success) {
+        if (success){
+            return result;
+        }
+        return "You don't have enough draws";
     }
 
     /**
@@ -53,4 +55,5 @@ public class MessageGenerator {
         }
         return MessageGenerator.warnings();
     }
+
 }

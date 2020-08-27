@@ -2,9 +2,6 @@ package events;
 
 import events.dataUnits.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class handles requests that are translated to function understandable
@@ -44,37 +41,12 @@ public class EventExecutioner{
      * @return someway to send all the cards drawn TBD
      */
     public String draw(int id, int num) {
-        String rarity = "";
-        int numProb = Constants.PROBABILITY.length;
-        boolean sr = false;
-        Map<Cards, Integer> map = new HashMap<>();
-        Random generator = new Random();
-        int prob;
-        for (int i=0; i<num; i++){
-            if (num==9 && !sr){
-                prob = generator.nextInt(Constants.PROBABILITY[0])+Constants.PROBABILITY[numProb-1]
-                -Constants.PROBABILITY[0];
-            }else {
-                prob = generator.nextInt(Constants.PROBABILITY[numProb-1]);
-            }
-            for (int j=0; j<numProb; j++){
-                if (prob<Constants.PROBABILITY[j]){
-                    rarity=Constants.RARITY[j];
-                    break;
-                }
-            }
-            if (rarity!=Constants.RARITY[0]){
-                sr=true;
-            }
-            Cards card = pool.getCard(rarity);
-            if (map.containsKey(card)){
-                map.put(card, map.get(card)+1);
-            }else {
-                map.put(card, 1);
-            }
+        boolean success=true;
+        if (players.getDraw(id, num)){
+            success=false;
         }
-        //have a map of all cards drawn, can change to other datatype when decided.
-        return null; //return TBD
+        String result = players.draw(id, num);
+        return MessageGenerator.drawnResult(result, success);
     }
 
     /**
@@ -115,18 +87,21 @@ public class EventExecutioner{
      * @return someway to display the cards, tbd
      */
     public String show(int id, String rarity) {
-        Deck deck = players.get(id).getOwned();
-
-        if (rarity.equals("all")){
-            return MessageGenerator.drawnResult(deck);
-        }
-        Deck newDeck = new Deck();
-        for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
-            if (entry.getKey().getRarity().equals(rarity)){
-                newDeck.addCard(entry.getKey(), entry.getValue());
+        boolean r = false;
+        if (!rarity.equals("all")){
+            for (int i=0; i<Constants.RARITY.length; i++){
+                if (rarity.equals(Constants.RARITY[i])){
+                    r = true;
+                }
             }
+        }else {
+            r = true;
         }
-        return MessageGenerator.drawnResult(newDeck);
+
+        if (!r){
+            return "rarity not defined";
+        }
+        return players.show(id, rarity);
     }
 
     /**
@@ -137,7 +112,6 @@ public class EventExecutioner{
      * @return TBD
      */
     public String getCard(int id, String name) {
-
-        return pool.getSpecificCard(name).getAddr(); //Return TBD
+        return players.getCard(id, name);
     }
 }

@@ -5,6 +5,7 @@ import events.DataBaseManager;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
 //
 /**
  * <b>PlayerCurr</b> is a mutable data structure that acts like a cache storing
@@ -35,21 +36,17 @@ public class PlayerCurr {
     //  players = all players stored in the cache
     //  recentPlayers keeps track of the most recently player player
 
-    // a ctor for testing purposes only
-    public PlayerCurr() {
-        recentPlayers = new PriorityQueue<>();
-        players = new HashMap<>();
-        cp = new CardPool();
-    }
+
+
 
     /**
      * @spec.effects Constructs a new PlayerCurr cache
      */
-    public PlayerCurr(DataBaseManager conn) {
+    public PlayerCurr() {
         recentPlayers= new PriorityQueue<>();
         players = new HashMap<>();
         priority = 0;
-        this.conn = conn;
+        this.conn = new DataBaseManager();
         cp = new CardPool(conn.getCards());
     }
 
@@ -130,6 +127,85 @@ public class PlayerCurr {
         a.addCards(second);
         b.addCards(first);
         return true;
+    }
+
+    /**
+     * Get the picture of the card with the given name
+     * if the player doesnt own the card, return an error msg
+     * @param id player discord id
+     * @param name name of the card
+     * @return the address of card (Change to picture smh)
+     */
+    public String getCard(int id, String name){
+        if (!players.get(id).getOwned().getDeck().containsKey(cp.getSpecificCard(name))){
+            return "You don't own this card";
+        }
+        return cp.getSpecificCard(name).getAddr();
+    }
+
+    /**
+     * show the cards
+     * @param id player discord id
+     * @param rarity rarity of cards to be shown
+     * @return display the card
+     */
+    public String show(int id, String rarity){
+        return players.get(id).show(rarity);
+    }
+
+    /**
+     * check if the person has enough draw left
+     * @param id player's discord id
+     * @param num number of draws requested
+     * @return whether or not enough of draws
+     */
+    public boolean getDraw(int id, int num){
+        return num<=players.get(id).getDraws();
+    }
+    /**
+     * draw the number of cards player requested
+     * @param id person's id
+     * @param num number of cards draw
+     * @return result of draws
+     * @spec.require id, num != null
+     * @spec.modifies person's number of draw left
+     * @spec.effects add cards to person's deck
+     */
+    public String draw(int id, int num){
+        String rarity = "";
+        int numProb = Constants.PROBABILITY.length;
+        boolean sr = false;
+        Map<Cards, Integer> map = new HashMap<>();
+        Random generator = new Random();
+        int prob;
+        for (int i=0; i<num; i++) {
+            if (num == 9 && !sr) {
+                prob = generator.nextInt(Constants.PROBABILITY[0]) + Constants.PROBABILITY[numProb - 1]
+                        - Constants.PROBABILITY[0];
+            } else {
+                prob = generator.nextInt(Constants.PROBABILITY[numProb - 1]);
+            }
+            for (int j = 0; j < numProb; j++) {
+                if (prob < Constants.PROBABILITY[j]) {
+                    rarity = Constants.RARITY[j];
+                    break;
+                }
+            }
+            if (rarity != Constants.RARITY[0]) {
+                sr = true;
+            }
+            Cards card = cp.getCard(rarity);
+            if (map.containsKey(card)){
+                map.put(card, map.get(card)+1);
+            }else {
+                map.put(card, 1);
+            }
+        }
+        Deck deck = new Deck(map);
+        players.get(id).addCards(deck);
+        players.get(id).drawn(num);
+        String result =deck.toString();
+        return result;
     }
 
     /**

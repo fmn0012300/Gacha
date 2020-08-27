@@ -88,6 +88,26 @@ public class Person implements Comparable<Person> {
     } // change to deck
 
     /**
+     * Show all cards of the rarity the player currently has
+     * If rarity = "all", show all cards they own
+     * @param rarity the rarity of the cards to be shown
+     * @return display the cards
+     */
+    public String show(String rarity){
+        if (rarity.equals("all")){
+            return owned.toString();
+        }else {
+            Deck newDeck = new Deck();
+            for (Map.Entry<Cards, Integer> entry: owned.getDeck().entrySet()){
+                if (entry.getKey().getRarity().equals(rarity)){
+                    newDeck.addCard(entry.getKey(), entry.getValue());
+                }
+            }
+            return newDeck.toString();
+        }
+    }
+
+    /**
      * remove a card(s) of a type from his deck
      * @param deck deck to be added
      * @return true if removed successfully, false if there's no enough cards to be removed (deck will not be changed)

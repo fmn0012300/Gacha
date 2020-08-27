@@ -96,8 +96,8 @@ public class Deck {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Deck)) return false;
+        if (this == o) {return true; }
+        if (!(o instanceof Deck)) {return false; }
         Deck deck1 = (Deck) o;
         return deck.equals(deck1.deck);
     }
@@ -107,6 +107,9 @@ public class Deck {
         String result="";
         for (Map.Entry<Cards, Integer> entry: deck.entrySet()){
             result+=entry.getKey().getName()+" x"+entry.getValue()+"\n";
+        }
+        if (result.equals("")){
+            result="You don't have any cards of this rarity";
         }
         return result;
     }
