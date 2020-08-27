@@ -35,21 +35,14 @@ public class PlayerCurr {
     //  players = all players stored in the cache
     //  recentPlayers keeps track of the most recently player player
 
-    // a ctor for testing purposes only
-    public PlayerCurr() {
-        recentPlayers = new PriorityQueue<>();
-        players = new HashMap<>();
-        cp = new CardPool();
-    }
-
     /**
      * @spec.effects Constructs a new PlayerCurr cache
      */
-    public PlayerCurr(DataBaseManager conn) {
+    public PlayerCurr() {
         recentPlayers= new PriorityQueue<>();
         players = new HashMap<>();
         priority = 0;
-        this.conn = conn;
+        this.conn = new DataBaseManager();
         cp = new CardPool(conn.getCards());
     }
 

@@ -82,6 +82,9 @@ public class Person implements Comparable<Person> {
             throw new IllegalArgumentException();
         }
         for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
+            if (entry.getValue() <= 0) {
+                return false;
+            }
             owned.addCard(entry.getKey(), entry.getValue());
         }
         return true;
