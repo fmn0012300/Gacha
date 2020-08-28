@@ -140,4 +140,11 @@ public class EventExecutioner{
 
         return pool.getSpecificCard(name).getAddr(); //Return TBD
     }
+
+    /**
+     * Save all data in playerCurr to database
+     */
+    public void save() {
+        players.save();
+    }
 }

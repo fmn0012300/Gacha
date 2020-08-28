@@ -49,6 +49,10 @@ public class ClientRequestHandler extends ListenerAdapter {
             case "!ten" :
                 statement = handler.draw10(user.getId());
                 break;
+            case "!save" :
+                handler.save();
+                statement = "Data saved";
+                break;
             default:
                 statement = handler.view();
                 break;

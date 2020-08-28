@@ -139,4 +139,14 @@ public class PlayerCurr {
         }
         return players.get(playerId);
     }
+
+    /**
+     * Save all data it's holding to database
+     */
+    public void save() {
+        for (int id : players.keySet()) {
+            Person save = players.get(id);
+            conn.updatePlayer(save);
+        }
+    }
 }
