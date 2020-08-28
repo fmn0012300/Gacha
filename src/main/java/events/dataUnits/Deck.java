@@ -25,9 +25,10 @@ public class Deck {
      * @param deck a given cards mapping to their number
      */
     public Deck(Map<Cards, Integer> deck) {
+        this.deck = new HashMap<>();
         for (Cards card: deck.keySet()) {
             if (deck.get(card) > 0) {
-                deck.put(card, deck.get(card));
+                this.deck.put(card, deck.get(card));
             }
         }
     }

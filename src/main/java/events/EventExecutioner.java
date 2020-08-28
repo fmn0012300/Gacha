@@ -124,4 +124,11 @@ public class EventExecutioner{
     public String getCard(String id, String name) {
         return players.getCard(id.hashCode(), name);
     }
+
+    /**
+     * Save all data in playerCurr to database
+     */
+    public void save() {
+        players.save();
+    }
 }

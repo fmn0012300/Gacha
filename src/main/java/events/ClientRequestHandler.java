@@ -58,6 +58,10 @@ public class ClientRequestHandler extends ListenerAdapter {
                 }
                 statement = handler.show(user.getId(), rarity);
                 break;
+            case "!save" :
+                handler.save();
+                statement = "Data saved";
+                break;
             default:
                 statement = handler.menu(user.getId());
                 break;
