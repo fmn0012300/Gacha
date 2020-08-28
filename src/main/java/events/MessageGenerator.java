@@ -29,7 +29,7 @@ public class MessageGenerator {
     }
 
     /**
-     * prompt for view
+     * prompt for view, to get card's photo
      * @return the prompt
      */
     public static String view() {

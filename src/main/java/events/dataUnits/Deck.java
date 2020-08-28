@@ -25,7 +25,11 @@ public class Deck {
      * @param deck a given cards mapping to their number
      */
     public Deck(Map<Cards, Integer> deck) {
-        this.deck = deck;
+        for (Cards card: deck.keySet()) {
+            if (deck.get(card) > 0) {
+                deck.put(card, deck.get(card));
+            }
+        }
     }
 
     /**
@@ -96,22 +100,19 @@ public class Deck {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true; }
-        if (!(o instanceof Deck)) {return false; }
+        if (this == o) {return true;}
+        if (!(o instanceof Deck)) {return false;}
         Deck deck1 = (Deck) o;
         return deck.equals(deck1.deck);
     }
 
     @Override
     public String toString(){
-        StringBuilder result= new StringBuilder();
+        String result="";
         for (Map.Entry<Cards, Integer> entry: deck.entrySet()){
-            result.append(entry.getKey().getName()).append(" x").append(entry.getValue()).append("\n");
+            result+=entry.getKey().getName()+" x"+entry.getValue()+"\n";
         }
-        if (result.toString().equals("")){
-            result = new StringBuilder("You don't have any cards of this rarity");
-        }
-        return result.toString();
+        return result;
     }
 
     @Override
