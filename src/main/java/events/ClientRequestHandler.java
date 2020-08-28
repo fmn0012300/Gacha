@@ -49,8 +49,17 @@ public class ClientRequestHandler extends ListenerAdapter {
             case "!ten" :
                 statement = handler.draw10(user.getId());
                 break;
+            case "!cards" :
+                String rarity;
+                if (breakup[1]==null){
+                    rarity = "all";
+                }else {
+                    rarity = breakup[1];
+                }
+                statement = handler.show(user.getId(), rarity);
+                break;
             default:
-                statement = handler.view();
+                statement = handler.menu(user.getId());
                 break;
         }
 

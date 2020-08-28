@@ -28,8 +28,8 @@ public class EventExecutioner{
      * @return statement that tells if it's completed successfully
      *         (use message generator class)
      */
-    public String registerPlayer(int id) {
-        return MessageGenerator.addPlayer(players.addPlayer(id));
+    public String registerPlayer(String id) {
+        return MessageGenerator.addPlayer(id, players.addPlayer(id.hashCode()));
     }
 
     /**
@@ -40,13 +40,13 @@ public class EventExecutioner{
      * @param num number of cards to be drawn
      * @return someway to send all the cards drawn TBD
      */
-    public String draw(int id, int num) {
+    public String draw(String id, int num) {
         boolean success=true;
-        if (players.getDraw(id, num)){
+        if (players.getDraw(id.hashCode(), num)){
             success=false;
         }
-        String result = players.draw(id, num);
-        return MessageGenerator.drawnResult(result, success);
+        String result = players.draw(id.hashCode(), num);
+        return MessageGenerator.drawnResult(id, result, success);
     }
 
     /**
@@ -54,7 +54,7 @@ public class EventExecutioner{
      * @param id discord id of the player
      * @return TBD
      */
-    public String draw1(int id) {
+    public String draw1(String id) {
         return draw(id, 1);
     }
 
@@ -63,7 +63,7 @@ public class EventExecutioner{
      * @param id id discord id of the player
      * @return TBD
      */
-    public String draw10(int id) {
+    public String draw10(String id) {
         return draw(id, 10);
     }
 
@@ -75,8 +75,9 @@ public class EventExecutioner{
      * @param card2 card2's name
      * @return statement to tell success
      */
-    public String trade(int id1, int id2, String card1, String card2, int onesAmount, int twosAmount) {
-        return MessageGenerator.trade(players.trade(id1, id2, card1, card2, onesAmount, twosAmount));
+    @SuppressWarnings("checkstyle:LineLength")
+    public String trade(String id1, String id2, String card1, String card2, int onesAmount, int twosAmount) {
+        return MessageGenerator.trade(id1, id2, players.trade(id1.hashCode(), id2.hashCode(), card1, card2, onesAmount, twosAmount));
     }
 
     /**
@@ -86,7 +87,7 @@ public class EventExecutioner{
      * @param rarity rarity of the cards to be shown
      * @return someway to display the cards, tbd
      */
-    public String show(int id, String rarity) {
+    public String show(String id, String rarity) {
         boolean r = false;
         if (!rarity.equals("all")){
             for (int i=0; i<Constants.RARITY.length; i++){
@@ -102,7 +103,15 @@ public class EventExecutioner{
         if (!r){
             return "rarity not defined";
         }
-        return players.show(id, rarity);
+        return players.show(id.hashCode(), rarity);
+    }
+
+    /**
+     *
+     * @return the functions the bot has
+     */
+    public String menu(String id){
+        return MessageGenerator.menu(id);
     }
 
     /**
@@ -112,7 +121,7 @@ public class EventExecutioner{
      * @param name name of the card
      * @return TBD
      */
-    public String getCard(int id, String name) {
-        return players.getCard(id, name);
+    public String getCard(String id, String name) {
+        return players.getCard(id.hashCode(), name);
     }
 }

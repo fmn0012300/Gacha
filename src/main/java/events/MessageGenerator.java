@@ -8,11 +8,11 @@ public class MessageGenerator {
      * @param success Draw successfully or not
      * @return result
      */
-    public static String drawnResult(String result, Boolean success) {
+    public static String drawnResult(String id, String result, Boolean success) {
         if (success){
             return result;
         }
-        return "You don't have enough draws";
+        return "<@"+id+"> You don't have enough draws";
     }
 
     /**
@@ -20,28 +20,37 @@ public class MessageGenerator {
      * @param success success or not
      * @return result text
      */
-    public static String trade(boolean success) {
+    public static String trade(String id1, String id2, boolean success) {
         if (success){
-            return "trade completed.";
+            return "<@"+id1+"> <@"+id2+"> trade completed.";
         }else {
-            return "trade failed, you do not own the card(s) you are trading away.";
+            return "<@"+id1+"> <@"+id2+"> trade failed, you do not own the card(s) you are trading away.";
         }
     }
 
     /**
-     * prompt for view, to get card's photo
-     * @return the prompt
+     * prompt the menu of the bot, the functions it has with explaination
+     * @return the menu
      */
-    public static String view() {
-        return null;
+    public static String menu(String id) {
+        String menu = "<@"+id+">\n"+
+                "Functions: \n"+
+                "!draw x -x can be any positive integer\n"+
+                "!single -draw a card\n"+
+                "!ten -draw ten cards with a rare or higher card guaranteed\n"+
+                "!menu -prompt the functions the bot has\n"+
+                "!cards -view the cards you own\n"+
+                "!cards rarity -rarity can be any existing rarity, shows all the cards of that rarity\n"+
+                "!trade -trading with other players"; //TBD
+        return menu;
     }
 
     /**
      * return warning or error message
      * @return error message string
      */
-    public static String warnings() {
-        return "error occurred, please contact admins for more info.";
+    public static String warnings(String id) {
+        return "<@"+id+"> error occurred, please contact admins for more info.";
     }
 
     /**
@@ -49,11 +58,11 @@ public class MessageGenerator {
      * @param success success or not
      * @return result text
      */
-    public static String addPlayer(boolean success) {
+    public static String addPlayer(String id, boolean success) {
         if (success){
-            return "player added successfully.";
+            return "<@"+id+"> player added successfully.";
         }
-        return "player already existed";
+        return "<@"+id+"> player already existed";
     }
 
 }
