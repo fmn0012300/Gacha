@@ -31,8 +31,8 @@ public class EventExecutioner{
      * @return statement that tells if it's completed successfully
      *         (use message generator class)
      */
-    public String registerPlayer(int id) {
-        return MessageGenerator.addPlayer(players.addPlayer(id));
+    public String registerPlayer(String id) {
+        return MessageGenerator.addPlayer(players.addPlayer(id.hashCode()));
     }
 
     /**
@@ -43,7 +43,7 @@ public class EventExecutioner{
      * @param num number of cards to be drawn
      * @return someway to send all the cards drawn TBD
      */
-    public String draw(int id, int num) {
+    public String draw(String id, int num) {
         String rarity = "";
         int numProb = Constants.PROBABILITY.length;
         boolean sr = false;
@@ -82,7 +82,7 @@ public class EventExecutioner{
      * @param id discord id of the player
      * @return TBD
      */
-    public String draw1(int id) {
+    public String draw1(String id) {
         return draw(id, 1);
     }
 
@@ -91,7 +91,7 @@ public class EventExecutioner{
      * @param id id discord id of the player
      * @return TBD
      */
-    public String draw10(int id) {
+    public String draw10(String id) {
         return draw(id, 10);
     }
 

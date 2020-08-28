@@ -24,26 +24,37 @@ public class ClientRequestHandler extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         String command = event.getMessage().getContentRaw();
 
-        if (true) {  // check on msg, see if it's a command to the bot
+        if (!command.startsWith("!")) {  // check on msg, see if it's a command to the bot
             return;
         }
         User user = event.getAuthor();
         String[] breakup = command.split(" ");
         String statement;  // for return statement
+        handler.registerPlayer(user.getId());
         switch (breakup[0]) {
-            case "1":
-                //smth
+            case "!draw":
+                try {
+                    int num = Integer.parseInt(breakup[1]);
+                    if (num <= 0) {
+                        throw new NumberFormatException();
+                    }
+                    statement = handler.draw(user.getId(), num);
+                } catch (NumberFormatException e) {
+                    statement = "!draw (A POSITIVE INTEGER)";
+                }
                 break;
-            case "2":
-                //smth
+            case "!single" :
+                statement = handler.draw1(user.getId());
                 break;
-                // so on and so forth
+            case "!ten" :
+                statement = handler.draw10(user.getId());
+                break;
             default:
-                // default behavior
+                statement = handler.view();
                 break;
         }
 
         // send msg back
-        // event.getChannel().sendMessage(statement).queue();
+        event.getChannel().sendMessage(statement).queue();
     }
 }
