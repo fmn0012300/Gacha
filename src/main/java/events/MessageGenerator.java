@@ -53,7 +53,7 @@ public class MessageGenerator {
         if (success){
             return "player added successfully.";
         }
-        return MessageGenerator.warnings();
+        return "player already existed";
     }
 
 }

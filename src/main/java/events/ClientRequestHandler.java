@@ -31,8 +31,8 @@ public class ClientRequestHandler extends ListenerAdapter {
         String[] breakup = command.split(" ");
         String statement;  // for return statement
         switch (breakup[0]) {
-            case "1":
-                //smth
+            case "!draw":
+                handler.draw1();
                 break;
             case "2":
                 //smth

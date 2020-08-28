@@ -119,13 +119,17 @@ public class Person implements Comparable<Person> {
         if (deck==null){
             throw new IllegalArgumentException();
         }
+        Deck temp = new Deck();
         for (Map.Entry<Cards, Integer> entry: deck.getDeck().entrySet()){
             if (!owned.getDeck().containsKey(entry.getKey())){
+                this.addCards(temp);
                 return false;
             }
             if (owned.getDeck().get(entry.getKey())- entry.getValue()<0){
+                this.addCards(temp);
                 return false;
             }
+            temp.addCard(entry.getKey(), entry.getValue());
             owned.removeCard(entry.getKey(), entry.getValue());
         }
         return true;
